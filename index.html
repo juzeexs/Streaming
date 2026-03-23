@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>StreamVault — Seu Universo de Entretenimento</title>
 <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;600;700&family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -40,6 +41,28 @@
     width: 18px; height: 18px; display: none; align-items: center;
     justify-content: center; color: #000; font-size: 10px; cursor: pointer;
   }
+
+.btn-vermelho {
+  display: inline-block;
+  padding: 10px 20px;         /* Diminuído de 10px para 4px no topo/base */
+  background-color: #ff0000; 
+  color: #ffffff;            
+  text-decoration: none;     
+  border-radius: 12px;       
+  font-family: sans-serif;   
+  font-size: 14px;           /* Fonte levemente menor para acompanhar a finura */
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.btn-vermelho:hover {
+  background-color: #cc0000;
+}
+
+.btn-vermelho i {
+  margin-left: 8px;
+  font-size: 12px;           /* Ícone acompanhando a proporção */
+}
   .search-results-dropdown {
     position: absolute; top: calc(100% + 6px); left: 0; right: 0;
     background: var(--surface); border: 1px solid var(--border);
@@ -320,9 +343,6 @@
 <!-- MINI CARDS — adicionados recentemente -->
 <section>
   <div class="container">
-    <div class="section-header">
-      <h2 class="section-title">⚡ Adicionados Esta Semana</h2>
-    </div>
     <div class="mini-cards-grid" id="miniCardsGrid"></div>
   </div>
 </section>
@@ -332,7 +352,8 @@
   <div class="container">
     <div class="section-header">
       <h2 class="section-title">Explorar por Categoria</h2>
-      <a href="categoria.html" class="section-more">Ver catálogo completo <i class="fa-solid fa-chevron-right"></i></a>
+     <a href="categoria.html" class="btn-vermelho">Ver Categorias
+</a>
     </div>
     <div class="categories-grid" id="catGrid"></div>
   </div>
@@ -531,12 +552,7 @@
 </div>
 
 <!-- NOTIFICATION -->
-<div class="notif-bar" id="notifBar">
-  <div class="notif-icon"><i class="fa-solid fa-bell"></i></div>
-  <div class="notif-text">
-    <strong id="notifTitle">Novo episódio disponível!</strong>
-    <p id="notifDesc">Seus Amigos e Vizinhos · Temp. 2 Ep. 1</p>
-  </div>
+
 </div>
 </body>
 <script>

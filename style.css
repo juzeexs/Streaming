@@ -490,12 +490,8 @@ section { padding: 36px 0; }
   border-radius: var(--radius); overflow: hidden;
   cursor: pointer; position: relative;
   background: var(--surface); scroll-snap-align: start;
-  transition: transform 0.25s, box-shadow 0.25s;
-  border: 1px solid transparent;
 }
 .card:hover {
-  transform: translateY(-5px) scale(1.02);
-  box-shadow: 0 18px 44px rgba(0,0,0,0.7);
   border-color: red; z-index: 10;
 }
 .card-poster { width: 100%; aspect-ratio: 2/3; object-fit: cover; }
