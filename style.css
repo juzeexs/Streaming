@@ -425,10 +425,29 @@ section { padding: 36px 0; }
 }
 .section-title { font-size: clamp(16px, 3vw, 24px); font-weight: 700; }
 .section-more {
-  color: red; font-size: 13px; font-weight: 500;
-  display: flex; align-items: center; gap: 4px;
-  transition: gap 0.2s; white-space: nowrap;
+  /* Seus estilos originais */
+  color: red;
+  font-size: 13px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: gap 0.2s;
+  white-space: nowrap;
+
+  /* Ajustes para transformar em botão */
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit; /* Garante que use a fonte do site */
 }
+
+/* Efeito de hover para o gap que você definiu */
+.section-more:hover {
+  gap: 8px;
+}
+
 .section-more:hover { gap: 8px; }
 
 /* ===== ROW WRAPPER + SETAS ===== */
@@ -445,6 +464,8 @@ section { padding: 36px 0; }
   cursor: pointer; display: flex; align-items: center; justify-content: center;
   transition: border-color 0.2s, color 0.2s, transform 0.15s;
   z-index: 2; margin: 0 3px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 .row-arrow:hover { border-color: rgba(255,255,255,0.35); color: #fff; transform: scale(1.09); }
 .row-arrow:active { transform: scale(0.93); }
