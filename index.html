@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>StreamVault — Seu Universo de Entretenimento</title>
+<link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;600;700&family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+<style>
+  /* ===== SEARCH BAR MOBILE ===== */
+  .search-bar-mobile {
+    display: none;
+    position: sticky;
+    top: 64px;
+    z-index: 998;
+    padding: 10px 16px;
+    background: rgba(0,0,0,0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .search-input-wrap { position: relative; width: 100%; }
+  .search-input-wrap .si-icon {
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    color: var(--muted); font-size: 15px; pointer-events: none; transition: color 0.2s;
+  }
+  .search-input-wrap input {
+    width: 100%; padding: 11px 42px 11px 42px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 12px; color: #fff; font-size: 15px;
+    font-family: 'DM Sans', sans-serif; outline: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .search-input-wrap input::placeholder { color: var(--muted); }
+  .search-input-wrap input:focus { border-color: red; background: #1c1c1e; }
+  .search-clear {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    background: var(--muted); border: none; border-radius: 50%;
+    width: 18px; height: 18px; display: none; align-items: center;
+    justify-content: center; color: #000; font-size: 10px; cursor: pointer;
+  }
+  .search-results-dropdown {
+    position: absolute; top: calc(100% + 6px); left: 0; right: 0;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; overflow: hidden; max-height: 340px;
+    overflow-y: auto; z-index: 9999; display: none;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.85);
+  }
+  .search-results-dropdown.open { display: block; }
+  .search-result-item {
+    display: flex; align-items: center; gap: 12px; padding: 10px 14px;
+    cursor: pointer; transition: background 0.15s;
+    border-bottom: 1px solid var(--border);
+  }
+  .search-result-item:last-child { border-bottom: none; }
+  .search-result-item:hover { background: var(--surface2); }
+  .search-result-img { width: 40px; height: 56px; border-radius: 7px; object-fit: cover; flex-shrink: 0; }
+  .search-result-info { flex: 1; min-width: 0; }
+  .search-result-title { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .search-result-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+
+
+  /* Desktop search overlay */
+  .search-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.88);
+    backdrop-filter: blur(16px); z-index: 1500;
+    display: flex; flex-direction: column; align-items: center;
+    padding-top: 120px; opacity: 0; pointer-events: none; transition: opacity 0.25s;
+  }
+  .search-overlay.open { opacity: 1; pointer-events: all; }
+  .search-overlay-inner { width: 100%; max-width: 640px; padding: 0 24px; position: relative; }
+  .search-overlay-close {
+    position: absolute; top: -60px; right: 24px; background: none;
+    border: none; color: var(--muted); font-size: 22px; cursor: pointer; transition: color 0.2s;
+  }
+  .search-overlay-close:hover { color: #fff; }
+  .search-overlay input {
+    width: 100%; padding: 18px 20px 18px 52px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 16px; color: #fff; font-size: 18px;
+    font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.2s;
+  }
+  .search-overlay input:focus { border-color: red; }
+  .search-overlay-icon { position: absolute; left: 40px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 18px; pointer-events: none; }
+  .search-overlay-results {
+    margin-top: 16px; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 16px; overflow: hidden; max-height: 380px; overflow-y: auto; display: none;
+  }
+  .search-overlay-results.open { display: block; }
+
+  /* ===== CAST IN MODAL ===== */
+  .modal-cast-section { margin-top: 20px; }
+  .modal-section-label {
+    font-size: 11px; color: var(--muted); text-transform: uppercase;
+    letter-spacing: 1px; margin-bottom: 14px;
+  }
+  .cast-scroll { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
+  .cast-scroll::-webkit-scrollbar { display: none; }
+  .cast-item { flex: 0 0 auto; text-align: center; width: 72px; }
+  .cast-avatar {
+    width: 64px; height: 64px; border-radius: 50%; object-fit: cover;
+    display: block; margin: 0 auto 6px; border: 2px solid var(--border); transition: border-color 0.2s;
+  }
+  .cast-item:hover .cast-avatar { border-color: red; }
+  .cast-name { font-size: 11px; color: rgba(255,255,255,0.85); line-height: 1.3; font-weight: 500; }
+  .cast-role { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+  /* ===== TRAILER BUTTON ===== */
+  .btn-trailer {
+    display: flex; align-items: center; gap: 8px; padding: 12px 20px;
+    background: #ff0000; color: #fff; border: none; border-radius: 980px;
+    font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; text-decoration: none;
+  }
+  .btn-trailer:hover { background: #cc0000; transform: scale(1.03); }
+
+  /* ===== EXTRA ROWS ===== */
+  .extra-rows-section { padding-top: 0; }
+
+  /* Modal body scroll */
+  .modal-body { max-height: 440px; overflow-y: auto; }
+  .modal-body::-webkit-scrollbar { width: 4px; }
+  .modal-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  /* Extended modal info grid */
+  .modal-info-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 14px; }
+
+  /* Modal actions flex wrap */
+  .modal-actions { flex-wrap: wrap; }
+
+  @media (max-width: 768px) {
+    .search-bar-mobile { display: block; }
+    .modal-info-grid { grid-template-columns: 1fr 1fr !important; }
+
+  }
+  @media (min-width: 769px) {
+    .search-bar-mobile { display: none !important; }
+  }
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <span class="nav-logo">StreamVault</span>
+  <ul class="nav-links">
+    <li><a href="#home">Início</a></li>
+    <li><a href="#series">Séries</a></li>
+    <li><a href="#filmes">Filmes</a></li>
+    <li><a href="#plans">Planos</a></li>
+    <li><a href="#categorias">Categorias</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="nav-menu-btn" onclick="toggleDrawer()" aria-label="Menu">
+      <i class="fa-solid fa-bars" id="menuIcon"></i>
+    </button>
+    <a href="#" class="btn-nav btn-outline">Entrar</a>
+    <a href="#plans" class="btn-nav btn-primary">Assinar</a>
+  </div>
+</nav>
+
+<!-- DRAWER MOBILE -->
+<nav class="nav-drawer" id="navDrawer">
+  <a href="#home" onclick="closeDrawer()">Início</a>
+  <a href="#series" onclick="closeDrawer()">Séries</a>
+  <a href="#filmes" onclick="closeDrawer()">Filmes</a>
+  <a href="#plans" onclick="closeDrawer()">Planos</a>
+  <a href="#categorias" onclick="closeDrawer()">Categorias</a>
+</nav>
+
+
+
+<!-- DESKTOP SEARCH OVERLAY -->
+<div class="search-overlay" id="searchOverlay" onclick="closeSearchOverlayOnBg(event)">
+  <div class="search-overlay-inner">
+    <div style="position:relative;">
+      <i class="fa-solid fa-magnifying-glass search-overlay-icon"></i>
+      <input type="text" id="desktopSearchInput" placeholder="Buscar filmes, séries, gêneros..."
+        oninput="handleSearchInput(this.value,'desktopDropdown',null)" autocomplete="off" />
+    </div>
+    <div class="search-overlay-results" id="desktopDropdown"></div>
+  </div>
+</div>
+
+
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-slides" id="heroSlides">
+    <div class="hero-slide active">
+      <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1600&q=80" alt="Hero 1">
+    </div>
+    <div class="hero-slide">
+      <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=1600&q=80" alt="Hero 2">
+    </div>
+    <div class="hero-slide">
+      <img src="https://images.unsplash.com/photo-1574267432553-4b4628081c31?w=1600&q=80" alt="Hero 3">
+    </div>
+  </div>
+  <div class="hero-gradient-side"></div>
+  <div class="hero-content">
+    <div class="hero-badge fade-up fade-up-delay-1"><i class="fa-solid fa-circle-play"></i> Nova Temporada</div>
+    <div class="hero-tag fade-up fade-up-delay-1">Programa de TV · Drama · Policial</div>
+    <h1 class="hero-title fade-up fade-up-delay-2" id="heroTitle">SEUS AMIGOS<br>E VIZINHOS</h1>
+    <div class="hero-meta fade-up fade-up-delay-3">
+      <span>2024</span><span class="dot"></span><span>2 Temporadas</span>
+      <span class="dot"></span><span>8 episódios</span><span class="rating-badge">A16</span>
+    </div>
+    <p class="hero-desc fade-up fade-up-delay-3" id="heroDesc">
+      Um thriller de suspense que explora as sombras por trás das aparências perfeitas em um condomínio de luxo. Segredos, traições e crimes que ninguém esperava.
+    </p>
+    <div class="hero-actions fade-up fade-up-delay-4">
+      <a href="#" class="btn-hero-main" onclick="openModal(0);return false;">
+        <i class="fa-solid fa-play"></i> Assistir Agora
+      </a>
+      <a href="#" class="btn-hero-sec" onclick="openModal(0);return false;">
+        <i class="fa-solid fa-circle-info"></i> Mais Informações
+      </a>
+    </div>
+    <p class="hero-trial fade-up fade-up-delay-4">7 dias grátis · Depois R$ 29,90/mês</p>
+  </div>
+  <div class="hero-dots" id="heroDots">
+    <div class="hero-dot active" onclick="goToSlide(0)"></div>
+    <div class="hero-dot" onclick="goToSlide(1)"></div>
+    <div class="hero-dot" onclick="goToSlide(2)"></div>
+  </div>
+</section>
+<div id="searchResults" style="display: none; margin-bottom: 40px;">
+    </div>
+
+<!-- CONTINUE WATCHING -->
+<section id="continue">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Continue Assistindo</h2>
+    </div>
+    <div class="row-wrapper">
+      <button class="row-arrow row-arrow-left" onclick="scrollRow('continueRow',-1)"><i class="fa-solid fa-chevron-left"></i></button>
+      <div class="scroll-row" id="continueRow"></div>
+      <button class="row-arrow row-arrow-right" onclick="scrollRow('continueRow',1)"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+  </div>
+</section>
+
+<!-- TOP 10 SERIES -->
+<section id="series">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">🏆 Top 10 Séries</h2>
+      <a href="lancamentos.html" class="section-more">Ver tudo <i class="fa-solid fa-chevron-right"></i></a>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" data-genre="todas" onclick="switchTab(this,'todas')">Todas</button>
+      <button class="tab-btn" data-genre="drama" onclick="switchTab(this,'drama')">Drama</button>
+      <button class="tab-btn" data-genre="comedia" onclick="switchTab(this,'comedia')">Comédia</button>
+      <button class="tab-btn" data-genre="acao" onclick="switchTab(this,'acao')">Ação</button>
+      <button class="tab-btn" data-genre="crime" onclick="switchTab(this,'crime')">Crime</button>
+      <button class="tab-btn" data-genre="sci-fi" onclick="switchTab(this,'sci-fi')">Sci-Fi</button>
+    </div>
+    <div class="row-wrapper">
+      <button class="row-arrow row-arrow-left" onclick="scrollRow('seriesRow',-1)"><i class="fa-solid fa-chevron-left"></i></button>
+      <div class="scroll-row" id="seriesRow"></div>
+      <button class="row-arrow row-arrow-right" onclick="scrollRow('seriesRow',1)"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED BANNER -->
+<div class="container" style="padding-top:20px;padding-bottom:20px;">
+  <div class="featured-banner" onclick="openModal(3)">
+    <img src="https://images.unsplash.com/photo-1594909122845-11baa439b7bf?w=1200&q=80" alt="Destaque">
+    <div class="featured-banner-content">
+      <div class="featured-label">Mais Assistido da Semana</div>
+      <div class="featured-title">ENTRE MONTANHAS</div>
+      <p class="featured-desc">Uma saga épica de sobrevivência nos Andes. Baseado em uma história real que chocou o mundo.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <a href="#" class="btn-hero-main" style="font-size:13px;padding:10px 20px;" onclick="openModal(3);return false;">
+          <i class="fa-solid fa-play"></i> Assistir
+        </a>
+        <a href="#" class="btn-hero-sec" style="font-size:13px;padding:10px 20px;">
+          <i class="fa-solid fa-plus"></i> Minha Lista
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOP 10 FILMES -->
+<section id="filmes">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">🎬 Top 10 Filmes</h2>
+      <a href="lancamentos.html" class="section-more">Ver tudo <i class="fa-solid fa-chevron-right"></i></a>
+    </div>
+    <div class="row-wrapper">
+      <button class="row-arrow row-arrow-left" onclick="scrollRow('moviesRow',-1)"><i class="fa-solid fa-chevron-left"></i></button>
+      <div class="scroll-row" id="moviesRow"></div>
+      <button class="row-arrow row-arrow-right" onclick="scrollRow('moviesRow',1)"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+  </div>
+</section>
+
+<!-- LANÇAMENTOS -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">🆕 Lançamentos</h2>
+      <a href="lancamentos.html" class="section-more">Ver tudo <i class="fa-solid fa-chevron-right"></i></a>
+    </div>
+    <div class="row-wrapper">
+      <button class="row-arrow row-arrow-left" onclick="scrollRow('newRow',-1)"><i class="fa-solid fa-chevron-left"></i></button>
+      <div class="scroll-row" id="newRow"></div>
+      <button class="row-arrow row-arrow-right" onclick="scrollRow('newRow',1)"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+  </div>
+</section>
+
+<!-- MINI CARDS — adicionados recentemente -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">⚡ Adicionados Esta Semana</h2>
+    </div>
+    <div class="mini-cards-grid" id="miniCardsGrid"></div>
+  </div>
+</section>
+
+<!-- CATEGORIAS -->
+<section id="categorias">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Explorar por Categoria</h2>
+      <a href="categoria.html" class="section-more">Ver catálogo completo <i class="fa-solid fa-chevron-right"></i></a>
+    </div>
+    <div class="categories-grid" id="catGrid"></div>
+  </div>
+</section>
+
+<!-- PLANS -->
+<section id="plans">
+  <div class="container">
+    <div class="plans-header">
+      <h2>ESCOLHA SEU PLANO</h2>
+      <p>Cancele quando quiser. Sem taxas ocultas.</p>
+    </div>
+    <div class="plans-grid">
+      <div class="plan-card">
+        <div class="plan-icon plan-icon-monthly"></div>
+        <div class="plan-name">Mensal</div>
+        <div class="plan-desc">Perfeito para experimentar. Acesso completo sem compromisso.</div>
+        <div class="plan-price">
+          <span class="currency">R$</span><span class="amount">29</span>
+          <span style="font-size:28px;font-family:'Bebas Neue'">,90</span><br>
+          <span class="period">por mês</span>
+        </div>
+        <div class="plan-savings" style="opacity:0">—</div>
+        <hr class="plan-divider">
+        <ul class="plan-features">
+          <li><i class="fa-solid fa-check"></i> Acesso a todo catálogo</li>
+          <li><i class="fa-solid fa-check"></i> Full HD 1080p</li>
+          <li><i class="fa-solid fa-check"></i> Até 2 telas simultâneas</li>
+          <li><i class="fa-solid fa-check"></i> Cancelamento a qualquer hora</li>
+          <li><i class="fa-solid fa-check"></i> 7 dias grátis no primeiro mês</li>
+        </ul>
+        <button class="btn-plan btn-plan-outline" onclick="selectPlan('Mensal')">Começar grátis</button>
+        <p class="plan-trial">7 dias grátis · R$ 29,90/mês após</p>
+      </div>
+      <div class="plan-card featured-plan">
+        <div class="plan-popular">Mais Popular</div>
+        <div class="plan-icon plan-icon-semester"></div>
+        <div class="plan-name">Semestral</div>
+        <div class="plan-desc">O favorito dos assinantes. Economize e aproveite mais por menos.</div>
+        <div class="plan-price">
+          <span class="currency">R$</span><span class="amount">22</span>
+          <span style="font-size:28px;font-family:'Bebas Neue'">,90</span><br>
+          <span class="period">por mês · cobrado 6x</span>
+        </div>
+        <div class="plan-savings">✦ Economize R$ 42,00 no semestre</div>
+        <hr class="plan-divider">
+        <ul class="plan-features">
+          <li><i class="fa-solid fa-check"></i> Acesso a todo catálogo</li>
+          <li><i class="fa-solid fa-check"></i> 4K Ultra HD + HDR</li>
+          <li><i class="fa-solid fa-check"></i> Até 4 telas simultâneas</li>
+          <li><i class="fa-solid fa-check"></i> Downloads offline ilimitados</li>
+          <li><i class="fa-solid fa-check"></i> 5 perfis de usuário</li>
+          <li><i class="fa-solid fa-check"></i> 7 dias grátis</li>
+        </ul>
+        <button class="btn-plan btn-plan-primary" onclick="selectPlan('Semestral')">Começar grátis</button>
+        <p class="plan-trial">7 dias grátis · R$ 137,40 a cada 6 meses</p>
+      </div>
+      <div class="plan-card">
+        <div class="plan-icon plan-icon-annual"></div>
+        <div class="plan-name">Anual</div>
+        <div class="plan-desc">O melhor custo-benefício. Pague menos e desfrute um ano inteiro.</div>
+        <div class="plan-price">
+          <span class="currency">R$</span><span class="amount">18</span>
+          <span style="font-size:28px;font-family:'Bebas Neue'">,90</span><br>
+          <span class="period">por mês · cobrado anualmente</span>
+        </div>
+        <div class="plan-savings">✦ Economize R$ 132,00 no ano</div>
+        <hr class="plan-divider">
+        <ul class="plan-features">
+          <li><i class="fa-solid fa-check"></i> Acesso a todo catálogo</li>
+          <li><i class="fa-solid fa-check"></i> 4K Ultra HD + Dolby Vision</li>
+          <li><i class="fa-solid fa-check"></i> Telas simultâneas ilimitadas</li>
+          <li><i class="fa-solid fa-check"></i> Downloads offline ilimitados</li>
+          <li><i class="fa-solid fa-check"></i> Perfis ilimitados</li>
+          <li><i class="fa-solid fa-check"></i> Acesso antecipado a estreias</li>
+          <li><i class="fa-solid fa-check"></i> Suporte prioritário 24h</li>
+        </ul>
+        <button class="btn-plan btn-plan-outline" onclick="selectPlan('Anual')">Começar grátis</button>
+        <p class="plan-trial">7 dias grátis · R$ 226,80/ano</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <span class="nav-logo">StreamVault</span>
+        <p class="footer-desc">O melhor entretenimento em um só lugar. Filmes, séries, documentários e muito mais, quando e onde quiser.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-btn"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" class="social-btn"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="#" class="social-btn"><i class="fa-brands fa-youtube"></i></a>
+          <a href="#" class="social-btn"><i class="fa-brands fa-tiktok"></i></a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Navegar</div>
+        <ul class="footer-links">
+          <li><a href="#home">Início</a></li>
+          <li><a href="#series">Séries</a></li>
+          <li><a href="#filmes">Filmes</a></li>
+          <li><a href="#categorias">Categorias</a></li>
+          <li><a href="#">Documentários</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Conta</div>
+        <ul class="footer-links">
+          <li><a href="#">Minha Conta</a></li>
+          <li><a href="#plans">Planos</a></li>
+          <li><a href="#">Configurações</a></li>
+          <li><a href="#">Downloads</a></li>
+          <li><a href="#">Perfis</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Suporte</div>
+        <ul class="footer-links">
+          <li><a href="#">Central de Ajuda</a></li>
+          <li><a href="#">Termos de Uso</a></li>
+          <li><a href="#">Privacidade</a></li>
+          <li><a href="#">Contato</a></li>
+          <li><a href="#">Sobre nós</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 StreamVault. Todos os direitos reservados.</p>
+      <p>Feito com ❤️ para os amantes de cinema</p>
+    </div>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
+  <div class="modal">
+    <div class="modal-hero">
+      <img id="modalImg" src="" alt="">
+      <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+      <div class="modal-hero-content">
+        <div class="modal-title" id="modalTitle"></div>
+        <div class="modal-meta">
+          <span id="modalYear"></span>
+          <span>·</span>
+          <span id="modalGenre"></span>
+          <span>·</span>
+          <span class="stars" id="modalStars"></span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-actions">
+        <a href="#" class="btn-hero-main" style="font-size:14px;padding:12px 24px;">
+          <i class="fa-solid fa-play"></i> Assistir
+        </a>
+        <a href="#" class="btn-trailer" id="modalTrailerBtn" target="_blank" rel="noopener noreferrer">
+          <i class="fa-brands fa-youtube"></i> Trailer
+        </a>
+        <a href="#" class="btn-hero-sec" style="font-size:14px;padding:12px 24px;">
+          <i class="fa-solid fa-plus"></i> Minha Lista
+        </a>
+        <a href="#" class="btn-hero-sec" style="font-size:14px;padding:12px 24px;">
+          <i class="fa-solid fa-thumbs-up"></i> Gostei
+        </a>
+      </div>
+      <p class="modal-desc" id="modalDesc"></p>
+      <div class="modal-info-grid">
+        <div class="modal-info-item">
+          <label>Diretor</label><span id="modalDirector"></span>
+        </div>
+        <div class="modal-info-item">
+          <label>Duração</label><span id="modalDuration"></span>
+        </div>
+        <div class="modal-info-item">
+          <label>Classificação</label><span id="modalRating"></span>
+        </div>
+        <div class="modal-info-item">
+          <label>País</label><span id="modalCountry"></span>
+        </div>
+        <div class="modal-info-item">
+          <label>Idioma</label><span id="modalLanguage"></span>
+        </div>
+        <div class="modal-info-item">
+          <label>Nota</label><span id="modalScore"></span>
+        </div>
+      </div>
+      <div class="modal-cast-section">
+        <div class="modal-section-label">Elenco Principal</div>
+        <div class="cast-scroll" id="modalCast"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NOTIFICATION -->
+<div class="notif-bar" id="notifBar">
+  <div class="notif-icon"><i class="fa-solid fa-bell"></i></div>
+  <div class="notif-text">
+    <strong id="notifTitle">Novo episódio disponível!</strong>
+    <p id="notifDesc">Seus Amigos e Vizinhos · Temp. 2 Ep. 1</p>
+  </div>
+</div>
+</body>
+<script>
+// Tornar cards de categoria clicáveis para categoria.html
+document.addEventListener('DOMContentLoaded', () => {
+  const observer = new MutationObserver(() => {
+    const cards = document.querySelectorAll('#catGrid .cat-card');
+    cards.forEach(card => {
+      if (!card.dataset.linked) {
+        card.dataset.linked = '1';
+        const name = card.querySelector('.cat-card-name');
+        if (name) {
+          const catName = name.textContent.trim();
+          card.addEventListener('click', () => {
+            window.location.href = `categoria.html?categoria=${encodeURIComponent(catName)}`;
+          });
+        }
+      }
+    });
+  });
+  const grid = document.getElementById('catGrid');
+  if (grid) observer.observe(grid, { childList: true });
+});
+</script>
+<script src="script.js"></script>
+</html>

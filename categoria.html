@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Categorias — StreamVault</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+<style>
+  /* ===== CATEGORIA PAGE STYLES ===== */
+  .cat-page-hero {
+    padding-top: 100px;
+    padding-bottom: 40px;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, var(--bg) 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .cat-page-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 60% 0%, rgba(220,0,0,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cat-page-hero .container { position: relative; z-index: 1; padding: 0 5%; }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 28px;
+    transition: color 0.2s;
+  }
+  .back-btn:hover { color: #fff; }
+
+  .page-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(42px, 6vw, 72px);
+    letter-spacing: 2px;
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+  .page-subtitle {
+    color: var(--muted);
+    font-size: 16px;
+    margin-bottom: 40px;
+  }
+
+  /* Category Pills */
+  .cat-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-bottom: 4px;
+  }
+  .cat-pill {
+    padding: 9px 20px;
+    border-radius: 980px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .cat-pill:hover { border-color: rgba(255,255,255,0.25); color: #fff; }
+  .cat-pill.active {
+    background: red;
+    border-color: red;
+    color: #fff;
+  }
+
+  /* Filter Bar */
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 0;
+    border-top: 1px solid var(--border);
+    margin-top: 32px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .filter-left { display: flex; align-items: center; gap: 16px; }
+  .result-count { font-size: 14px; color: var(--muted); }
+  .result-count span { color: #fff; font-weight: 600; }
+
+  .type-toggle {
+    display: flex;
+    background: var(--surface);
+    border-radius: 10px;
+    padding: 3px;
+    gap: 2px;
+  }
+  .type-btn {
+    padding: 6px 16px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .type-btn.active { background: var(--surface2); color: #fff; }
+
+  .sort-select {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 14px;
+    color: #fff;
+    font-size: 13px;
+    cursor: pointer;
+    outline: none;
+  }
+
+  /* Catalog Grid */
+  .catalog-section { padding: 40px 5% 80px; }
+  .catalog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+  }
+
+  .cat-item {
+    cursor: pointer;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--surface);
+    transition: transform 0.25s;
+    position: relative;
+    border: 1px solid transparent;
+  }
+  .cat-item:hover {
+    transform: translateY(-6px);
+    border-color: red;
+  }
+  .cat-item-poster { width: 100%; aspect-ratio: 2/3; object-fit: cover; display: block; }
+  
+  .cat-item-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 60%);
+    opacity: 0; transition: opacity 0.3s;
+    display: flex; flex-direction: column; justify-content: flex-end; padding: 15px;
+  }
+  .cat-item:hover .cat-item-overlay { opacity: 1; }
+
+  .cat-item-type {
+    position: absolute; top: 10px; left: 10px;
+    background: red; border-radius: 4px; padding: 2px 6px;
+    font-size: 10px; font-weight: bold; color: #fff; text-transform: uppercase;
+  }
+
+  /* Modal Overlay */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.9);
+    z-index: 2000; display: none; align-items: center; justify-content: center;
+    backdrop-filter: blur(10px); padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-content {
+    background: #111; width: 100%; max-width: 850px; border-radius: 20px;
+    overflow: hidden; position: relative; border: 1px solid var(--border);
+  }
+  .modal-hero { width: 100%; height: 350px; position: relative; }
+  .modal-hero img { width: 100%; height: 100%; object-fit: cover; }
+  .modal-close {
+    position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.5);
+    border: none; color: #fff; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; z-index: 10;
+  }
+</style>
+</head>
+<body>
+
+<nav id="navbar">
+  <span class="nav-logo" onclick="location.href='index.html'" style="cursor:pointer">StreamVault</span>
+  <ul class="nav-links">
+    <li><a href="index.html">Início</a></li>
+    <li><a href="lancamentos.html">Lançamentos</a></li>
+  </ul>
+</nav>
+
+<div class="cat-page-hero">
+  <div class="container">
+    <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Voltar</a>
+    <h1 class="page-title" id="pageTitle">TODO O CATÁLOGO</h1>
+    <p class="page-subtitle" id="pageSubtitle">Explore nossa biblioteca completa</p>
+
+    <div class="cat-pills" id="catPills">
+      <button class="cat-pill active" onclick="filterCategory('Todos', this)">Todos</button>
+      <button class="cat-pill" onclick="filterCategory('Ação', this)">Ação</button>
+      <button class="cat-pill" onclick="filterCategory('Drama', this)">Drama</button>
+      <button class="cat-pill" onclick="filterCategory('Comédia', this)">Comédia</button>
+      <button class="cat-pill" onclick="filterCategory('Terror', this)">Terror</button>
+      <button class="cat-pill" onclick="filterCategory('Ficção Científica', this)">Ficção</button>
+      <button class="cat-pill" onclick="filterCategory('Animação', this)">Animação</button>
+    </div>
+
+    <div class="filter-bar">
+      <div class="filter-left">
+        <div class="result-count">Exibindo <span id="countDisplay">0</span> títulos</div>
+        <div class="type-toggle">
+          <button class="type-btn active" onclick="filterType('todos', this)">Todos</button>
+          <button class="type-btn" onclick="filterType('movie', this)">Filmes</button>
+          <button class="type-btn" onclick="filterType('tv', this)">Séries</button>
+        </div>
+      </div>
+      <select class="sort-select" onchange="sortCatalog(this.value)">
+        <option value="default">Destaques</option>
+        <option value="rating">Melhor Avaliados</option>
+        <option value="year">Mais Recentes</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<section class="catalog-section">
+  <div class="catalog-grid" id="catalogGrid"></div>
+  <div id="emptyState" style="display:none; text-align:center; color:gray; padding:50px;">
+    Nenhum título encontrado para esta categoria.
+  </div>
+</section>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+    <div class="modal-hero">
+      <img id="modalImg" src="">
+      <div style="position:absolute; bottom:20px; left:30px; z-index:2">
+        <h2 id="modalTitle" style="font-size:32px; font-family:'Bebas Neue'"></h2>
+        <div style="font-size:14px; color:#ccc">
+          <span id="modalYear"></span> • <span id="modalGenre"></span> • <span id="modalRating" style="color:gold"></span>
+        </div>
+      </div>
+      <div style="position:absolute; inset:0; background:linear-gradient(to top, #111, transparent)"></div>
+    </div>
+    <div style="padding:30px">
+        <p id="modalDesc" style="color:#aaa; line-height:1.6; margin-bottom:20px"></p>
+        <div class="modal-info-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:13px">
+            <div><label style="color:gray">Idioma:</label> <span id="modalLang"></span></div>
+            <div><label style="color:gray">Votos:</label> <span id="modalVotes"></span></div>
+        </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API_KEY = 'd51fec1a601f0d1c209761a719599c24';
+const BASE_URL = 'https://api.themoviedb.org/3';
+const IMG_URL = 'https://image.tmdb.org/t/p/w500';
+const WIDE_URL = 'https://image.tmdb.org/t/p/original';
+
+let allItems = [];
+let currentCat = 'Todos';
+let currentType = 'todos';
+let currentSort = 'default';
+
+// Mapeamento de Gêneros TMDB
+const genreMap = {
+    28: 'Ação', 18: 'Drama', 35: 'Comédia', 27: 'Terror', 
+    878: 'Ficção Científica', 16: 'Animação', 12: 'Aventura'
+};
+
+async function loadInitialData() {
+    try {
+        const [mRes, tRes] = await Promise.all([
+            fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}&language=pt-BR&page=1`),
+            fetch(`${BASE_URL}/tv/popular?api_key=${API_KEY}&language=pt-BR&page=1`)
+        ]);
+        const mData = await mRes.json();
+        const tData = await tRes.json();
+
+        const movies = mData.results.map(i => format(i, 'movie'));
+        const tv = tData.results.map(i => format(i, 'tv'));
+
+        allItems = [...movies, ...tv];
+        render();
+    } catch (e) { console.error(e); }
+}
+
+function format(item, type) {
+    return {
+        id: item.id,
+        title: item.title || item.name,
+        type: type,
+        genre: item.genre_ids.map(id => genreMap[id]).filter(n => n)[0] || 'Outros',
+        year: (item.release_date || item.first_air_date || '2024').split('-')[0],
+        score: item.vote_average.toFixed(1),
+        desc: item.overview || "Sinopse indisponível.",
+        poster: IMG_URL + item.poster_path,
+        backdrop: item.backdrop_path ? WIDE_URL + item.backdrop_path : IMG_URL + item.poster_path,
+        lang: item.original_language.toUpperCase(),
+        votes: item.vote_count
+    };
+}
+
+function render() {
+    let filtered = allItems.filter(i => {
+        const cM = currentCat === 'Todos' || i.genre === currentCat;
+        const tM = currentType === 'todos' || i.type === currentType;
+        return cM && tM;
+    });
+
+    if(currentSort === 'rating') filtered.sort((a,b) => b.score - a.score);
+    if(currentSort === 'year') filtered.sort((a,b) => b.year - a.year);
+
+    const grid = document.getElementById('catalogGrid');
+    document.getElementById('countDisplay').textContent = filtered.length;
+    
+    grid.innerHTML = filtered.map(item => `
+        <div class="cat-item" onclick="openModal(${item.id})">
+            <img class="cat-item-poster" src="${item.poster}">
+            <span class="cat-item-type">${item.type === 'movie' ? 'Filme' : 'Série'}</span>
+            <div class="cat-item-overlay">
+                <div style="font-weight:bold; margin-bottom:5px">${item.title}</div>
+                <div style="font-size:12px">${item.year} • ★ ${item.score}</div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function filterCategory(cat, el) {
+    currentCat = cat;
+    document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('pageTitle').textContent = cat === 'Todos' ? 'TODO O CATÁLOGO' : cat.toUpperCase();
+    render();
+}
+
+function filterType(type, el) {
+    currentType = type;
+    document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    render();
+}
+
+function sortCatalog(val) {
+    currentSort = val;
+    render();
+}
+
+function openModal(id) {
+    const item = allItems.find(i => i.id === id);
+    document.getElementById('modalImg').src = item.backdrop;
+    document.getElementById('modalTitle').textContent = item.title;
+    document.getElementById('modalYear').textContent = item.year;
+    document.getElementById('modalGenre').textContent = item.genre;
+    document.getElementById('modalRating').textContent = '★ ' + item.score;
+    document.getElementById('modalDesc').textContent = item.desc;
+    document.getElementById('modalLang').textContent = item.lang;
+    document.getElementById('modalVotes').textContent = item.votes;
+    document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+
+loadInitialData();
+</script>
+</body>
+</html>

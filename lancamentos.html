@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>StreamVault — Lançamentos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --bg: #060606;
+            --surface: #121212;
+            --surface2: #1a1a1a;
+            --accent: #e50914;
+            --border: rgba(255,255,255,0.1);
+            --muted: #808080;
+            --gold: #ffd60a;
+            --radius: 12px;
+        }
+
+        .page-wrapper {
+            min-height: 100vh;
+            padding-top: 160px; /* Aumentado para dar espaço à barra de busca */
+            padding-bottom: 80px;
+            background-color: var(--bg);
+        }
+
+        /* ===== BARRA DE BUSCA FIXA ===== */
+        .search-bar-container {
+            position: fixed;
+            top: 85px; /* Logo abaixo da sua nav fixa */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 600px;
+            z-index: 1000;
+            background: rgba(18, 18, 18, 0.8);
+            backdrop-filter: blur(15px);
+            padding: 10px;
+            border-radius: 50px;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar-container:focus-within {
+            border-color: var(--accent);
+            width: 95%;
+            max-width: 650px;
+        }
+
+        .search-input {
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            width: 100%;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .search-icon {
+            color: var(--muted);
+            margin-left: 20px;
+            font-size: 18px;
+        }
+
+        /* ===== GRID E CARDS ===== */
+        #carouselsContainer {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 30px 20px;
+            padding: 40px 48px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .movie-card {
+            width: 100%;
+            border-radius: var(--radius);
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: var(--surface);
+            position: relative;
+        }
+
+        .movie-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            z-index: 10;
+        }
+
+        .movie-poster-wrap { position: relative; aspect-ratio: 2/3; }
+        .movie-poster { width: 100%; height: 100%; object-fit: cover; }
+        .movie-score {
+            position: absolute; bottom: 10px; left: 10px;
+            background: rgba(0,0,0,0.8); padding: 4px 8px; border-radius: 6px;
+            font-size: 11px; color: var(--gold); font-weight: bold;
+        }
+
+        .movie-info { padding: 12px; }
+        .movie-title {
+            font-size: 14px; font-weight: 700; color: #fff;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+
+        .movie-meta-row { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 6px; margin-top: 4px; }
+
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.95);
+            display: none; align-items: center; justify-content: center; z-index: 2000;
+            backdrop-filter: blur(10px);
+        }
+        .modal-overlay.open { display: flex; }
+        .modal {
+            background: var(--surface); width: 90%; max-width: 800px; border-radius: 20px;
+            overflow: hidden; position: relative; border: 1px solid var(--border);
+        }
+        .modal-hero img { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
+        .modal-body { padding: 30px; }
+        .modal-close {
+            position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.5);
+            color: #fff; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .page-wrapper { padding-top: 140px; }
+            #carouselsContainer { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); padding: 20px; }
+            .search-bar-container { top: 75px; width: 85%; }
+        }
+    </style>
+</head>
+<body>
+
+<nav id="navbar">
+    <a href="index.html" class="nav-logo">StreamVault</a>
+    <div class="nav-actions">
+        <a href="index.html" class="btn-nav btn-outline">Voltar ao Início</a>
+    </div>
+</nav>
+
+<div class="search-bar-container">
+    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+    <input type="text" id="searchInput" class="search-input" placeholder="O que você quer assistir hoje?" oninput="searchGlobal(this.value)">
+</div>
+
+<div class="page-wrapper">
+    <div id="carouselsContainer">
+        </div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
+    <div class="modal">
+        <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+        <div class="modal-hero"><img id="modalImg" src=""></div>
+        <div class="modal-body">
+            <h2 id="modalTitle" style="font-family:'Bebas Neue'; font-size: 32px; color: white;"></h2>
+            <div style="display:flex; gap: 15px; margin: 10px 0; color: var(--muted); font-size: 14px;">
+                <span id="modalYear"></span>
+                <span id="modalRating" style="color: var(--gold)"></span>
+                <span id="modalType"></span>
+            </div>
+            <p id="modalDesc" style="line-height: 1.6; color: rgba(255,255,255,0.8); font-family: 'DM Sans';"></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    const API_KEY = 'd51fec1a601f0d1c209761a719599c24';
+    const BASE_URL = 'https://api.themoviedb.org/3';
+    const IMG_URL = 'https://image.tmdb.org/t/p/w500';
+    const WIDE_URL = 'https://image.tmdb.org/t/p/original';
+
+    let allContent = []; // Armazena os 300 itens originais
+    let filteredResults = []; // Armazena o que está sendo exibido
+
+    // ===== BUSCA OS 300 ITENS =====
+    async function fetchTMDBData() {
+        try {
+            const moviePages = 8; 
+            const tvPages = 7;    
+            let promises = [];
+
+            for (let i = 1; i <= moviePages; i++) {
+                promises.push(fetch(`${BASE_URL}/movie/now_playing?api_key=${API_KEY}&language=pt-BR&page=${i}`).then(res => res.json()));
+            }
+            for (let i = 1; i <= tvPages; i++) {
+                promises.push(fetch(`${BASE_URL}/tv/on_the_air?api_key=${API_KEY}&language=pt-BR&page=${i}`).then(res => res.json()));
+            }
+
+            const results = await Promise.all(promises);
+            
+            allContent = results.flatMap((data, index) => {
+                const isMovie = index < moviePages;
+                return data.results.map(item => ({
+                    title: isMovie ? item.title : item.name,
+                    year: (isMovie ? item.release_date : item.first_air_date)?.split('-')[0] || '2024',
+                    rating: item.vote_average.toFixed(1),
+                    desc: item.overview || "Sem sinopse disponível.",
+                    img: item.poster_path ? IMG_URL + item.poster_path : 'https://via.placeholder.com/500x750?text=Sem+Poster',
+                    wide: item.backdrop_path ? WIDE_URL + item.backdrop_path : 'https://via.placeholder.com/1280x720?text=Sem+Fundo',
+                    type: isMovie ? "Filme" : "Série"
+                }));
+            });
+
+            allContent.sort(() => 0.5 - Math.random());
+            filteredResults = [...allContent];
+            renderGrid(filteredResults);
+        } catch (err) {
+            console.error("Erro ao carregar dados:", err);
+        }
+    }
+
+    // ===== FILTRO EM TEMPO REAL =====
+    function filterContent() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        
+        filteredResults = allContent.filter(item => 
+            item.title.toLowerCase().includes(searchTerm)
+        );
+
+        renderGrid(filteredResults);
+    }
+
+    // ===== RENDERIZA O GRID =====
+    function renderGrid(data) {
+        const container = document.getElementById('carouselsContainer');
+        
+        if (data.length === 0) {
+            container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--muted); padding: 100px;">Nenhum título encontrado com esse nome.</div>`;
+            return;
+        }
+
+        container.innerHTML = data.map((item, idx) => `
+            <div class="movie-card" onclick="openModal(${idx})">
+                <div class="movie-poster-wrap">
+                    <img class="movie-poster" src="${item.img}" loading="lazy">
+                    <div class="movie-score"><i class="fa-solid fa-star"></i> ${item.rating}</div>
+                </div>
+                <div class="movie-info">
+                    <div class="movie-title">${item.title}</div>
+                    <div class="movie-meta-row">
+                        <span>${item.year}</span>
+                        <span>•</span>
+                        <span>${item.type}</span>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // ===== MODAL =====
+    function openModal(idx) {
+        const item = filteredResults[idx];
+        document.getElementById('modalImg').src = item.wide;
+        document.getElementById('modalTitle').textContent = item.title;
+        document.getElementById('modalDesc').textContent = item.desc;
+        document.getElementById('modalYear').textContent = item.year;
+        document.getElementById('modalRating').textContent = "★ " + item.rating;
+        document.getElementById('modalType').textContent = item.type;
+        document.getElementById('modalOverlay').classList.add('open');
+    }
+
+    function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+    function closeModalOnOverlay(e) { if (e.target.id === 'modalOverlay') closeModal(); }
+
+    fetchTMDBData();
+
+let searchTimer;
+
+async function handleGlobalSearch() {
+    const query = document.getElementById('mainSearch').value;
+    const mainSections = document.getElementById('mainSections'); // Suas divs de carrossel
+    const searchGrid = document.getElementById('searchResultsGrid');
+
+    // Se a busca estiver vazia, volta a mostrar os carrosséis
+    if (query.length < 2) {
+        mainSections.style.display = 'block';
+        searchGrid.style.display = 'none';
+        return;
+    }
+
+    // Debounce: Espera o utilizador parar de digitar para não travar a API
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(async () => {
+        mainSections.style.display = 'none';
+        searchGrid.style.display = 'grid';
+        
+        try {
+            const res = await fetch(`${BASE_URL}/search/multi?api_key=${API_KEY}&language=pt-BR&query=${encodeURIComponent(query)}`);
+            const data = await res.json();
+            
+            // Filtra para remover pessoas (atores) dos resultados
+            const results = data.results.filter(i => i.media_type !== 'person');
+            
+            searchGrid.innerHTML = results.map(item => {
+                // Formata e adiciona ao array global para o modal funcionar
+                const idInArray = allContent.length;
+                const formatted = {
+                    title: item.title || item.name,
+                    img: item.poster_path ? IMG_URL + item.poster_path : 'https://via.placeholder.com/500x750?text=Sem+Poster',
+                    wide: WIDE_URL + (item.backdrop_path || item.poster_path),
+                    rating: item.vote_average ? item.vote_average.toFixed(1) : '0.0',
+                    desc: item.overview || "Sinopse não disponível.",
+                    year: (item.release_date || item.first_air_date || "").split('-')[0]
+                };
+                allContent.push(formatted);
+                
+                return `
+                    <div class="movie-card" onclick="openModal(${idInArray})">
+                        <div class="movie-poster-wrap">
+                            <img src="${formatted.img}" loading="lazy">
+                            <div class="movie-score">★ ${formatted.rating}</div>
+                        </div>
+                        <div class="movie-info">
+                            <div class="movie-title">${formatted.title}</div>
+                            <div class="movie-meta-row"><span>${formatted.year}</span></div>
+                        </div>
+                    </div>`;
+            }).join('');
+        } catch (err) {
+            console.error("Erro na busca global:", err);
+        }
+    }, 500);
+}
+</script>
+</body>
+</html>
