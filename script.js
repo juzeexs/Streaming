@@ -603,3 +603,106 @@ setTimeout(() => {
 
 // ===== INIT =====
 fetchTMDBData();
+
+// ── Categoria cards → categoria.html ──
+document.addEventListener('DOMContentLoaded', () => {
+  const observer = new MutationObserver(() => {
+    document.querySelectorAll('#catGrid .cat-card').forEach(card => {
+      if (!card.dataset.linked) {
+        card.dataset.linked = '1';
+        const name = card.querySelector('.cat-card-name');
+        if (name) {
+          card.addEventListener('click', () => {
+            window.location.href = `categoria.html?categoria=${encodeURIComponent(name.textContent.trim())}`;
+          });
+        }
+      }
+    });
+  });
+  const grid = document.getElementById('catGrid');
+  if (grid) observer.observe(grid, { childList: true });
+});
+
+// ── Carrossel 3D ──
+(function () {
+  var slides = Array.from(document.querySelectorAll('.c3d-slide'));
+  var dots   = Array.from(document.querySelectorAll('.c3d-dot'));
+  var total  = slides.length;
+  var current = 0;
+  var autoTimer;
+
+  function offset(i) {
+    var d = i - current;
+    if (d >  total / 2) d -= total;
+    if (d < -total / 2) d += total;
+    return d;
+  }
+
+  function render() {
+    var stage = document.getElementById('carousel3dStage');
+    if (!stage) return;
+    var stageW = stage.offsetWidth;
+    var slideW = Math.min(stageW * 0.60, 660);
+    var step   = Math.min(stageW * 0.46, 340);
+
+    slides.forEach(function (slide, i) {
+      var d    = offset(i);
+      var absD = Math.abs(d);
+      slide.classList.remove('is-active', 'is-side', 'is-far');
+      var tx    = d * step;
+      var tz    = -absD * 110;
+      var ry    = d * -22;
+      var scale = d === 0 ? 1 : absD === 1 ? 0.80 : 0.64;
+      var op    = d === 0 ? 1 : absD === 1 ? 0.55 : 0;
+      slide.style.cssText = [
+        'transform:translateX(' + tx + 'px) translateZ(' + tz + 'px) rotateY(' + ry + 'deg) scale(' + scale + ')',
+        'opacity:' + op,
+        'pointer-events:' + (absD <= 1 ? 'all' : 'none'),
+        'filter:' + (d === 0 ? 'brightness(1) blur(0)' : 'brightness(0.55) blur(1px)'),
+        'z-index:' + (10 - absD)
+      ].join(';');
+      if (d === 0) slide.classList.add('is-active');
+      else if (absD === 1) slide.classList.add('is-side');
+      else slide.classList.add('is-far');
+    });
+
+    dots.forEach(function (dot, i) {
+      dot.classList.toggle('active', i === current);
+    });
+  }
+
+  function goto(idx) {
+    current = (idx % total + total) % total;
+    render();
+    resetAuto();
+  }
+
+  function resetAuto() {
+    clearInterval(autoTimer);
+    autoTimer = setInterval(function () { goto(current + 1); }, 5000);
+  }
+
+  window.carousel3dMove = function (dir) { goto(current + dir); };
+  window.carousel3dGoto = function (idx)  { goto(idx); };
+
+  slides.forEach(function (slide, i) {
+    slide.addEventListener('click', function () {
+      var d = offset(i);
+      if (d !== 0) goto(current + (d > 0 ? 1 : -1));
+    });
+  });
+
+  var stage = document.getElementById('carousel3dStage');
+  var touchX = 0;
+  if (stage) {
+    stage.addEventListener('touchstart', function (e) { touchX = e.touches[0].clientX; }, { passive: true });
+    stage.addEventListener('touchend',   function (e) {
+      var dx = e.changedTouches[0].clientX - touchX;
+      if (Math.abs(dx) > 40) goto(current + (dx < 0 ? 1 : -1));
+    });
+  }
+
+  render();
+  resetAuto();
+  window.addEventListener('resize', render);
+})();
