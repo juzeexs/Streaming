@@ -2,15 +2,14 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <title>StreamVault - Escolha seu Plano</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <title>StreamVault — Escolha seu Plano</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<link rel="stylesheet" href="assinatura.css">
+  <link rel="stylesheet" href="assinatura.css">
 </head>
 <body>
 
@@ -22,6 +21,7 @@
     <div class="plans-bg-orb plans-orb-3"></div>
     <div class="plans-bg-grid"></div>
     <div class="plans-bg-noise"></div>
+    <div class="plans-scanlines"></div>
   </div>
 
   <!-- Header -->
@@ -32,7 +32,14 @@
       <span class="plans-eyebrow-dot"></span>
     </div>
     <h2 class="plans-3d-title">ESCOLHA SEU PLANO</h2>
-    <p class="plans-3d-sub">Cancele quando quiser. Sem taxas ocultas. 7 dias gratis em todos os planos.</p>
+    <p class="plans-3d-sub">Cancele quando quiser. Sem taxas ocultas. <strong style="color:#fff">7 dias grátis</strong> em todos os planos.</p>
+
+    <!-- Urgency Banner -->
+    <div class="plans-urgency">
+      <i class="fa-solid fa-bolt"></i>
+      <span>Oferta por tempo limitado — preços especiais de lançamento</span>
+      <div class="plans-urgency-timer" id="urgencyTimer">23:47:12</div>
+    </div>
   </div>
 
   <!-- 3D Carousel -->
@@ -42,6 +49,7 @@
     </button>
 
     <div class="plans-carousel-stage" id="plansStage">
+
       <!-- CARD 0 - Mensal -->
       <div class="pcard side-card left" data-pindex="0">
         <div class="pcard-inner">
@@ -54,28 +62,29 @@
             <span class="pcard-tier-label">MENSAL</span>
           </div>
           <div class="pcard-price-wrap">
+            <div class="pcard-original-price">~~R$ 79,90~~</div>
             <div class="pcard-price">
               <sup class="pcard-cur">R$</sup>
-              <span class="pcard-amount">29</span>
+              <span class="pcard-amount">49</span>
               <span class="pcard-cents">,90</span>
             </div>
-            <div class="pcard-period">por mes</div>
+            <div class="pcard-period">por mês · renovação automática</div>
           </div>
-          <div class="pcard-desc">Perfeito para experimentar. Acesso completo sem compromisso.</div>
+          <div class="pcard-desc">Acesso completo sem compromisso. Ideal para quem quer experimentar sem limites.</div>
           <div class="pcard-divider">
             <span></span>
             <i class="fa-solid fa-play"></i>
             <span></span>
           </div>
           <ul class="pcard-features">
-            <li><i class="fa-solid fa-check"></i><span>Acesso a todo catalogo</span></li>
+            <li><i class="fa-solid fa-check"></i><span>Acesso a todo catálogo</span></li>
             <li><i class="fa-solid fa-check"></i><span>Full HD 1080p</span></li>
-            <li><i class="fa-solid fa-check"></i><span>Ate 2 telas simultaneas</span></li>
+            <li><i class="fa-solid fa-check"></i><span>Até 2 telas simultâneas</span></li>
             <li><i class="fa-solid fa-check"></i><span>Cancelamento a qualquer hora</span></li>
-            <li><i class="fa-solid fa-check"></i><span>7 dias gratis</span></li>
+            <li><i class="fa-solid fa-check"></i><span>7 dias grátis incluídos</span></li>
           </ul>
-          <button class="pcard-btn pcard-btn-outline" onclick="selectPlan('Mensal')">Comecar gratis</button>
-          <p class="pcard-trial">7 dias gratis · R$ 29,90/mes apos</p>
+          <button class="pcard-btn pcard-btn-outline" onclick="selectPlan('Mensal')">Começar grátis</button>
+          <p class="pcard-trial">7 dias grátis · R$ 49,90/mês após</p>
         </div>
       </div>
 
@@ -92,36 +101,38 @@
             <span class="pcard-tier-label">SEMESTRAL</span>
           </div>
           <div class="pcard-price-wrap">
+            <div class="pcard-original-price">~~R$ 59,90/mês~~</div>
             <div class="pcard-price">
               <sup class="pcard-cur">R$</sup>
-              <span class="pcard-amount">22</span>
+              <span class="pcard-amount">39</span>
               <span class="pcard-cents">,90</span>
             </div>
-            <div class="pcard-period">por mes · cobrado 6x</div>
+            <div class="pcard-period">por mês · cobrado R$ 239,40 a cada 6 meses</div>
           </div>
-          <div class="pcard-savings pcard-savings-gold"><i class="fa-solid fa-bolt"></i> Economize R$ 42,00 no semestre</div>
-          <div class="pcard-desc">O favorito dos assinantes. Economize e aproveite mais por menos.</div>
+          <div class="pcard-savings pcard-savings-gold"><i class="fa-solid fa-bolt"></i> Economize R$ 120,00 no semestre</div>
+          <div class="pcard-desc">O favorito dos assinantes. Qualidade máxima com o melhor custo-benefício.</div>
           <div class="pcard-divider">
             <span></span>
             <i class="fa-solid fa-star"></i>
             <span></span>
           </div>
           <ul class="pcard-features">
-            <li><i class="fa-solid fa-check"></i><span>Acesso a todo catalogo</span></li>
-            <li><i class="fa-solid fa-check"></i><span>4K Ultra HD + HDR</span></li>
-            <li><i class="fa-solid fa-check"></i><span>Ate 4 telas simultaneas</span></li>
+            <li><i class="fa-solid fa-check"></i><span>Acesso a todo catálogo</span></li>
+            <li><i class="fa-solid fa-check"></i><span>4K Ultra HD + HDR10+</span></li>
+            <li><i class="fa-solid fa-check"></i><span>Até 4 telas simultâneas</span></li>
             <li><i class="fa-solid fa-check"></i><span>Downloads offline ilimitados</span></li>
-            <li><i class="fa-solid fa-check"></i><span>5 perfis de usuario</span></li>
-            <li><i class="fa-solid fa-check"></i><span>7 dias gratis</span></li>
+            <li><i class="fa-solid fa-check"></i><span>5 perfis personalizados</span></li>
+            <li><i class="fa-solid fa-check"></i><span>7 dias grátis incluídos</span></li>
           </ul>
-          <button class="pcard-btn pcard-btn-gold" onclick="selectPlan('Semestral')">Comecar gratis</button>
-          <p class="pcard-trial">7 dias gratis · R$ 137,40 a cada 6 meses</p>
+          <button class="pcard-btn pcard-btn-gold" onclick="selectPlan('Semestral')">Começar grátis</button>
+          <p class="pcard-trial">7 dias grátis · R$ 239,40 a cada 6 meses</p>
         </div>
       </div>
 
       <!-- CARD 2 - Anual -->
       <div class="pcard side-card right" data-pindex="2">
         <div class="pcard-inner">
+          <div class="pcard-best-badge"><i class="fa-solid fa-gem"></i> Melhor Valor</div>
           <div class="pcard-glow"></div>
           <div class="pcard-edge"></div>
           <div class="pcard-tier">
@@ -131,36 +142,38 @@
             <span class="pcard-tier-label">ANUAL</span>
           </div>
           <div class="pcard-price-wrap">
+            <div class="pcard-original-price">~~R$ 49,90/mês~~</div>
             <div class="pcard-price">
               <sup class="pcard-cur">R$</sup>
-              <span class="pcard-amount">18</span>
+              <span class="pcard-amount">29</span>
               <span class="pcard-cents">,90</span>
             </div>
-            <div class="pcard-period">por mes · cobrado anualmente</div>
+            <div class="pcard-period">por mês · cobrado R$ 358,80 ao ano</div>
           </div>
-          <div class="pcard-savings pcard-savings-premium"><i class="fa-solid fa-gem"></i> Economize R$ 132,00 no ano</div>
-          <div class="pcard-desc">O melhor custo-beneficio. Pague menos e desfrute um ano inteiro.</div>
+          <div class="pcard-savings pcard-savings-premium"><i class="fa-solid fa-gem"></i> Economize R$ 240,00 no ano</div>
+          <div class="pcard-desc">O máximo do StreamVault. Acesso VIP completo por um ano inteiro.</div>
           <div class="pcard-divider">
             <span></span>
             <i class="fa-solid fa-crown"></i>
             <span></span>
           </div>
           <ul class="pcard-features">
-            <li><i class="fa-solid fa-check"></i><span>Acesso a todo catalogo</span></li>
+            <li><i class="fa-solid fa-check"></i><span>Acesso a todo catálogo</span></li>
             <li><i class="fa-solid fa-check"></i><span>4K Ultra HD + Dolby Vision</span></li>
-            <li><i class="fa-solid fa-check"></i><span>Telas simultaneas ilimitadas</span></li>
+            <li><i class="fa-solid fa-check"></i><span>Telas simultâneas ilimitadas</span></li>
             <li><i class="fa-solid fa-check"></i><span>Downloads offline ilimitados</span></li>
             <li><i class="fa-solid fa-check"></i><span>Perfis ilimitados</span></li>
-            <li><i class="fa-solid fa-check"></i><span>Acesso antecipado a estreias</span></li>
-            <li><i class="fa-solid fa-check"></i><span>Suporte prioritario 24h</span></li>
+            <li><i class="fa-solid fa-check"></i><span>Estreias antecipadas exclusivas</span></li>
+            <li><i class="fa-solid fa-check"></i><span>Suporte prioritário VIP 24h</span></li>
           </ul>
-          <button class="pcard-btn pcard-btn-primary" onclick="selectPlan('Anual')">Comecar gratis</button>
-          <p class="pcard-trial">7 dias gratis · R$ 226,80/ano</p>
+          <button class="pcard-btn pcard-btn-primary" onclick="selectPlan('Anual')">Começar grátis</button>
+          <p class="pcard-trial">7 dias grátis · R$ 358,80/ano</p>
         </div>
       </div>
+
     </div>
 
-    <button class="plans-c3d-arrow plans-c3d-next" id="plansNext" aria-label="Proximo plano">
+    <button class="plans-c3d-arrow plans-c3d-next" id="plansNext" aria-label="Próximo plano">
       <i class="fa-solid fa-chevron-right"></i>
     </button>
   </div>
@@ -186,7 +199,34 @@
     <div class="plans-guarantee-sep"></div>
     <div class="plans-guarantee-item">
       <i class="fa-solid fa-gift"></i>
-      <span>7 dias gratis garantidos</span>
+      <span>7 dias grátis garantidos</span>
+    </div>
+    <div class="plans-guarantee-sep"></div>
+    <div class="plans-guarantee-item">
+      <i class="fa-solid fa-medal"></i>
+      <span>+2 milhões de assinantes</span>
+    </div>
+  </div>
+
+  <!-- Social Proof -->
+  <div class="plans-social-proof">
+    <div class="plans-avatars">
+      <img src="https://i.pravatar.cc/40?img=1" alt="user">
+      <img src="https://i.pravatar.cc/40?img=2" alt="user">
+      <img src="https://i.pravatar.cc/40?img=3" alt="user">
+      <img src="https://i.pravatar.cc/40?img=4" alt="user">
+      <img src="https://i.pravatar.cc/40?img=5" alt="user">
+    </div>
+    <div class="plans-social-text">
+      <div class="plans-stars">
+        <i class="fa-solid fa-star"></i>
+        <i class="fa-solid fa-star"></i>
+        <i class="fa-solid fa-star"></i>
+        <i class="fa-solid fa-star"></i>
+        <i class="fa-solid fa-star"></i>
+        <span>4.9/5</span>
+      </div>
+      <span class="plans-social-label">Mais de 2M de assinantes satisfeitos</span>
     </div>
   </div>
 </section>
@@ -199,9 +239,30 @@
         <i class="fa-solid fa-play"></i>
         STREAMVAULT
       </div>
+      <div class="checkout-header-security">
+        <i class="fa-solid fa-lock"></i>
+        <span>Pagamento Seguro</span>
+      </div>
       <button class="checkout-close" onclick="closeCheckout()" aria-label="Fechar">
         <i class="fa-solid fa-xmark"></i>
       </button>
+    </div>
+
+    <div class="checkout-progress" id="checkoutProgress">
+      <div class="checkout-progress-step active" data-step="1">
+        <div class="checkout-progress-dot"><i class="fa-solid fa-user"></i></div>
+        <span>Dados Pessoais</span>
+      </div>
+      <div class="checkout-progress-line"></div>
+      <div class="checkout-progress-step" data-step="2">
+        <div class="checkout-progress-dot"><i class="fa-solid fa-credit-card"></i></div>
+        <span>Pagamento</span>
+      </div>
+      <div class="checkout-progress-line"></div>
+      <div class="checkout-progress-step" data-step="3">
+        <div class="checkout-progress-dot"><i class="fa-solid fa-check"></i></div>
+        <span>Confirmação</span>
+      </div>
     </div>
     
     <div class="checkout-body" id="checkoutBody">
@@ -209,31 +270,82 @@
       <div class="checkout-plan-summary">
         <div class="checkout-plan-badge" id="checkoutBadge">Plano Selecionado</div>
         <h3 class="checkout-plan-name" id="checkoutPlanName">SEMESTRAL</h3>
-        <p class="checkout-plan-price" id="checkoutPlanPrice">R$ 22,90/mes · cobrado 6x</p>
+        <p class="checkout-plan-price" id="checkoutPlanPrice">R$ 39,90/mês · cobrado 6x</p>
+
+        <div class="checkout-plan-highlight" id="checkoutHighlight">
+          <i class="fa-solid fa-bolt"></i>
+          <span id="checkoutSavings">Economize R$ 120,00</span>
+        </div>
         
         <ul class="checkout-plan-features" id="checkoutFeatures">
           <!-- Inserido via JS -->
         </ul>
+
+        <!-- Trust Section -->
+        <div class="checkout-trust">
+          <div class="checkout-trust-item">
+            <i class="fa-solid fa-shield-halved"></i>
+            <div>
+              <strong>Garantia de reembolso</strong>
+              <span>7 dias sem perguntas</span>
+            </div>
+          </div>
+          <div class="checkout-trust-item">
+            <i class="fa-brands fa-pix"></i>
+            <div>
+              <strong>Pix, Débito ou Crédito</strong>
+              <span>Aprovação instantânea</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment Logos -->
+        <div class="checkout-payment-logos">
+          <i class="fa-brands fa-cc-visa" title="Visa"></i>
+          <i class="fa-brands fa-cc-mastercard" title="Mastercard"></i>
+          <i class="fa-brands fa-cc-amex" title="Amex"></i>
+          <i class="fa-brands fa-pix" title="Pix"></i>
+        </div>
       </div>
       
       <!-- Checkout Form -->
       <div class="checkout-form-section">
         <form id="checkoutForm" onsubmit="processPayment(event)">
+
+          <!-- Payment Method Tabs -->
+          <div class="payment-tabs">
+            <button type="button" class="payment-tab active" onclick="switchPayment('card', this)">
+              <i class="fa-solid fa-credit-card"></i> Cartão
+            </button>
+            <button type="button" class="payment-tab" onclick="switchPayment('pix', this)">
+              <i class="fa-brands fa-pix"></i> Pix
+            </button>
+            <button type="button" class="payment-tab" onclick="switchPayment('boleto', this)">
+              <i class="fa-solid fa-barcode"></i> Boleto
+            </button>
+          </div>
+
           <!-- Step 1: Personal Info -->
           <div class="checkout-step">
             <div class="checkout-step-header">
               <div class="checkout-step-num">1</div>
-              <h4 class="checkout-step-title">INFORMACOES PESSOAIS</h4>
+              <h4 class="checkout-step-title">INFORMAÇÕES PESSOAIS</h4>
             </div>
             
             <div class="form-group">
               <label class="form-label" for="fullName">Nome Completo</label>
-              <input type="text" id="fullName" class="form-input" placeholder="Como aparece no cartao" required>
+              <div class="form-input-wrap">
+                <i class="fa-solid fa-user form-input-icon"></i>
+                <input type="text" id="fullName" class="form-input has-icon" placeholder="Como aparece no cartão" required>
+              </div>
             </div>
             
             <div class="form-group">
               <label class="form-label" for="email">E-mail</label>
-              <input type="email" id="email" class="form-input" placeholder="seu@email.com" required>
+              <div class="form-input-wrap">
+                <i class="fa-solid fa-envelope form-input-icon"></i>
+                <input type="email" id="email" class="form-input has-icon" placeholder="seu@email.com" required>
+              </div>
             </div>
             
             <div class="form-row">
@@ -249,14 +361,34 @@
           </div>
           
           <!-- Step 2: Card Info -->
-          <div class="checkout-step">
+          <div class="checkout-step" id="cardPaymentSection">
             <div class="checkout-step-header">
               <div class="checkout-step-num">2</div>
-              <h4 class="checkout-step-title">DADOS DO CARTAO</h4>
+              <h4 class="checkout-step-title">DADOS DO CARTÃO</h4>
+            </div>
+
+            <!-- Virtual Card Preview -->
+            <div class="virtual-card" id="virtualCard">
+              <div class="virtual-card-shine"></div>
+              <div class="virtual-card-logo"><i class="fa-solid fa-play"></i> STREAMVAULT</div>
+              <div class="virtual-card-number" id="vcNumber">•••• •••• •••• ••••</div>
+              <div class="virtual-card-footer">
+                <div>
+                  <div class="virtual-card-label">Nome</div>
+                  <div class="virtual-card-value" id="vcName">SEU NOME</div>
+                </div>
+                <div>
+                  <div class="virtual-card-label">Validade</div>
+                  <div class="virtual-card-value" id="vcExpiry">MM/AA</div>
+                </div>
+                <div class="virtual-card-brand" id="vcBrand">
+                  <i class="fa-solid fa-credit-card"></i>
+                </div>
+              </div>
             </div>
             
             <div class="form-group">
-              <label class="form-label" for="cardNumber">Numero do Cartao</label>
+              <label class="form-label" for="cardNumber">Número do Cartão</label>
               <div class="card-input-wrap">
                 <input type="text" id="cardNumber" class="form-input" placeholder="0000 0000 0000 0000" maxlength="19" required>
                 <i class="fa-solid fa-credit-card card-brand-icon" id="cardBrandIcon"></i>
@@ -269,19 +401,64 @@
                 <input type="text" id="cardExpiry" class="form-input" placeholder="MM/AA" maxlength="5" required>
               </div>
               <div class="form-group">
-                <label class="form-label" for="cardCvv">CVV</label>
+                <label class="form-label" for="cardCvv">CVV <i class="fa-solid fa-circle-question cvv-help" title="3 dígitos no verso do cartão"></i></label>
                 <input type="text" id="cardCvv" class="form-input" placeholder="123" maxlength="4" required>
               </div>
             </div>
             
             <div class="form-group">
-              <label class="form-label" for="cardName">Nome no Cartao</label>
-              <input type="text" id="cardName" class="form-input" placeholder="NOME COMO APARECE NO CARTAO" style="text-transform: uppercase;" required>
+              <label class="form-label" for="cardName">Nome no Cartão</label>
+              <input type="text" id="cardName" class="form-input" placeholder="NOME COMO APARECE NO CARTÃO" style="text-transform: uppercase;" required>
+            </div>
+
+            <!-- Installments -->
+            <div class="form-group" id="installmentsGroup">
+              <label class="form-label" for="installments">Parcelamento</label>
+              <select id="installments" class="form-input form-select">
+                <option value="1">1x sem juros</option>
+                <option value="2">2x sem juros</option>
+                <option value="3">3x sem juros</option>
+                <option value="6">6x sem juros</option>
+                <option value="12">12x com juros</option>
+              </select>
             </div>
             
             <div class="secure-badge">
               <i class="fa-solid fa-lock"></i>
-              <span>Seus dados estao protegidos com criptografia SSL de 256 bits</span>
+              <span>Criptografia SSL 256-bits · Dados protegidos pelo PCI DSS</span>
+            </div>
+          </div>
+
+          <!-- Pix Section -->
+          <div class="checkout-step pix-section" id="pixPaymentSection" style="display:none">
+            <div class="checkout-step-header">
+              <div class="checkout-step-num pix-num"><i class="fa-brands fa-pix"></i></div>
+              <h4 class="checkout-step-title">PAGAMENTO VIA PIX</h4>
+            </div>
+            <div class="pix-info">
+              <div class="pix-qr">
+                <i class="fa-brands fa-pix pix-qr-icon"></i>
+                <p>QR Code gerado após confirmação</p>
+              </div>
+              <ul class="pix-steps">
+                <li><span>1</span> Confirme seus dados e clique em "Gerar Pix"</li>
+                <li><span>2</span> Escaneie o QR Code com seu app bancário</li>
+                <li><span>3</span> Pagamento aprovado em segundos</li>
+              </ul>
+              <div class="pix-badge"><i class="fa-solid fa-bolt"></i> Aprovação instantânea · 24h por dia</div>
+            </div>
+          </div>
+
+          <!-- Boleto Section -->
+          <div class="checkout-step boleto-section" id="boletoPaymentSection" style="display:none">
+            <div class="checkout-step-header">
+              <div class="checkout-step-num"><i class="fa-solid fa-barcode"></i></div>
+              <h4 class="checkout-step-title">PAGAMENTO VIA BOLETO</h4>
+            </div>
+            <div class="boleto-info">
+              <i class="fa-solid fa-barcode boleto-icon"></i>
+              <p>Boleto gerado após confirmação. Vencimento em <strong>3 dias úteis</strong>.</p>
+              <div class="boleto-warning"><i class="fa-solid fa-triangle-exclamation"></i> Período de teste começa após compensação do boleto.</div>
             </div>
           </div>
           
@@ -289,19 +466,23 @@
           <div class="checkout-total">
             <div>
               <div class="checkout-total-label">Total hoje</div>
-              <div class="checkout-total-note">Cobranca apos 7 dias gratis</div>
+              <div class="checkout-total-note">Cobrança após 7 dias grátis</div>
             </div>
-            <div class="checkout-total-amount" id="checkoutTotal">R$ 0,00</div>
+            <div>
+              <div class="checkout-total-amount" id="checkoutTotal">R$ 0,00</div>
+              <div class="checkout-total-free">Hoje: R$ 0,00</div>
+            </div>
           </div>
           
           <button type="submit" class="checkout-submit" id="submitBtn">
             <span class="spinner"></span>
+            <i class="fa-solid fa-lock btn-icon"></i>
             <span class="btn-text">CONFIRMAR ASSINATURA</span>
           </button>
           
           <p class="terms-text">
-            Ao confirmar, voce concorda com nossos <a href="#">Termos de Servico</a> e <a href="#">Politica de Privacidade</a>.<br>
-            Sua assinatura sera renovada automaticamente. Cancele a qualquer momento.
+            Ao confirmar, você concorda com nossos <a href="#">Termos de Serviço</a> e <a href="#">Política de Privacidade</a>.<br>
+            Sua assinatura será renovada automaticamente. Cancele a qualquer momento.
           </p>
         </form>
       </div>
@@ -309,11 +490,12 @@
     
     <!-- Success View -->
     <div class="success-view" id="successView">
+      <div class="success-confetti" id="successConfetti"></div>
       <div class="success-icon">
         <i class="fa-solid fa-check"></i>
       </div>
-      <h3 class="success-title">ASSINATURA CONFIRMADA</h3>
-      <p class="success-text">Bem-vindo ao StreamVault Premium! Sua conta esta ativa.</p>
+      <h3 class="success-title">ASSINATURA CONFIRMADA!</h3>
+      <p class="success-text">Bem-vindo ao StreamVault Premium! Sua conta está ativa e pronta.</p>
       
       <div class="success-details">
         <div class="success-detail-row">
@@ -325,26 +507,32 @@
           <span class="success-detail-value" id="successValue">-</span>
         </div>
         <div class="success-detail-row">
-          <span class="success-detail-label">Periodo de teste</span>
-          <span class="success-detail-value">7 dias gratis</span>
+          <span class="success-detail-label">Período de teste</span>
+          <span class="success-detail-value success-free"><i class="fa-solid fa-gift"></i> 7 dias GRÁTIS</span>
         </div>
         <div class="success-detail-row">
-          <span class="success-detail-label">Primeira cobranca</span>
+          <span class="success-detail-label">Primeira cobrança</span>
           <span class="success-detail-value" id="successFirstCharge">-</span>
         </div>
         <div class="success-detail-row">
-          <span class="success-detail-label">Final do cartao</span>
+          <span class="success-detail-label">Final do cartão</span>
           <span class="success-detail-value" id="successCard">-</span>
         </div>
+      </div>
+
+      <div class="success-perks">
+        <div class="success-perk"><i class="fa-solid fa-envelope"></i> Confirmação enviada por e-mail</div>
+        <div class="success-perk"><i class="fa-solid fa-mobile-screen"></i> Acesse pelo app ou navegador</div>
       </div>
       
       <button class="success-btn" onclick="goToDashboard()">
         <i class="fa-solid fa-play"></i>
-        COMECAR A ASSISTIR
+        COMEÇAR A ASSISTIR AGORA
       </button>
     </div>
   </div>
 </div>
-</body>
+
 <script src="assinatura.js"></script>
+</body>
 </html>
