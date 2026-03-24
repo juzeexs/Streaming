@@ -32,7 +32,7 @@ async function fetchTMDBData() {
       genre: 'Filme',
       year: m.release_date ? m.release_date.split('-')[0] : '2024',
       rating: m.vote_average.toFixed(1),
-      stars: '⭐ ' + m.vote_average.toFixed(1),
+      stars: ' ' + m.vote_average.toFixed(1),
       duration: 'Cinema',
       director: 'TMDB',
       desc: m.overview || 'Sinopse não disponível.',
@@ -49,7 +49,7 @@ async function fetchTMDBData() {
       genre: 'Série',
       year: s.first_air_date ? s.first_air_date.split('-')[0] : '2024',
       rating: s.vote_average.toFixed(1),
-      stars: '⭐ ' + s.vote_average.toFixed(1),
+      stars: ' ' + s.vote_average.toFixed(1),
       duration: 'Várias Temporadas',
       director: 'TV',
       desc: s.overview || 'Sinopse não disponível.',
@@ -121,7 +121,7 @@ function renderCard(item, idx, showRank = false) {
     <div class="card" onclick="openModal(${idx})">
       <img class="card-poster" src="${item.img}" alt="${item.title}" loading="lazy">
       ${rank ? `<div class="card-rank">${rank}</div>` : ''}
-      <div class="card-badge">⭐ ${item.rating}</div>
+      <div class="card-badge"> ${item.rating}</div>
       <div class="card-info">
         <div class="card-title">${item.title}</div>
         <div class="card-genre">${item.genre} · ${item.year}</div>
@@ -146,7 +146,7 @@ function renderContinueCard(item, idx) {
 
 // ===== CARD SPOTLIGHT (horizontal) =====
 function renderSpotlightCard(item, idx) {
-  const tags = ['🔥 Em Alta', '⭐ Destaque', '🆕 Novo', '🏆 Top Avaliado', '🎬 Original', '✨ Exclusivo'];
+  const tags = [' Em Alta', ' Destaque', ' Novo', ' Top Avaliado', ' Original', ' Exclusivo'];
   const tag = tags[idx % tags.length];
   return `
     <div class="card-spotlight" onclick="openModal(${idx})">
@@ -168,7 +168,7 @@ function renderSpotlightCard(item, idx) {
 
 // ===== CARD WIDE COM SCORE =====
 function renderWideScoreCard(item, idx) {
-  const flag = countryFlags[item.origin] || '🌍';
+  const flag = countryFlags[item.origin] || '';
   return `
     <div class="card-wide-score" onclick="openModal(${idx})">
       <div class="card-wide-score-thumb">
@@ -180,7 +180,7 @@ function renderWideScoreCard(item, idx) {
       <div class="card-wide-score-body">
         <div class="card-wide-score-header">
           <div class="card-wide-score-title">${item.title}</div>
-          <div class="score-badge">⭐ ${item.rating}</div>
+          <div class="score-badge"> ${item.rating}</div>
         </div>
         <div class="card-wide-score-meta">
           <span class="card-wide-score-flag">${flag}</span>
@@ -204,7 +204,7 @@ function renderMiniCard(item, idx) {
         <div class="card-mini-title">${item.title}</div>
         <div class="card-mini-genre">${item.genre} · ${item.year}</div>
         <div class="card-mini-footer">
-          <div class="card-mini-rating">⭐ ${item.rating}</div>
+          <div class="card-mini-rating"> ${item.rating}</div>
           <span class="card-mini-new">NOVO</span>
         </div>
       </div>
@@ -380,7 +380,7 @@ async function performSearch(query) {
           genre,
           year,
           rating,
-          stars: '⭐ ' + rating,
+          stars: ' ' + rating,
           duration: genre === 'Filme' ? 'Cinema' : 'Várias Temporadas',
           director: '—',
           desc: item.overview || 'Sinopse não disponível.',
@@ -400,7 +400,7 @@ async function performSearch(query) {
             <div class="search-result-title">${title}</div>
             <div class="search-result-sub">
               <span>${genre} · ${year}</span>
-              <span class="search-result-rating">⭐ ${rating}</span>
+              <span class="search-result-rating"> ${rating}</span>
             </div>
           </div>
         </div>`;
@@ -532,7 +532,7 @@ async function switchTab(btn, genre) {
             genre: 'Série',
             year: s.first_air_date ? s.first_air_date.split('-')[0] : '2024',
             rating: s.vote_average.toFixed(1),
-            stars: '⭐ ' + s.vote_average.toFixed(1),
+            stars: ' ' + s.vote_average.toFixed(1),
             duration: 'Várias Temporadas',
             director: '—',
             desc: s.overview || 'Sinopse não disponível.',
@@ -705,4 +705,68 @@ document.addEventListener('DOMContentLoaded', () => {
   render();
   resetAuto();
   window.addEventListener('resize', render);
+})();
+
+(function(){
+  const cards = Array.from(document.querySelectorAll('.pcard'));
+  let current = 1; // start at Semestral
+  const total = cards.length;
+
+  const states = ['left','center','right'];
+  // for 3 cards: indices wrap around
+
+  function updateCarousel() {
+    cards.forEach((card, i) => {
+      let offset = i - current;
+      // wrap
+      if (offset < -1) offset += total;
+      if (offset >  1) offset -= total;
+      let state;
+      if (offset === 0)  state = 'center';
+      else if (offset === -1) state = 'left';
+      else if (offset ===  1) state = 'right';
+      else state = i < current ? 'hidden-left' : 'hidden-right';
+      card.dataset.state = state;
+    });
+
+    // dots
+    document.querySelectorAll('.plans-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === current);
+    });
+  }
+
+  window.plansCarouselMove = function(dir) {
+    current = (current + dir + total) % total;
+    updateCarousel();
+  };
+  window.plansCarouselGoto = function(i) {
+    current = i;
+    updateCarousel();
+  };
+
+  // click side cards to navigate
+  cards.forEach((card, i) => {
+    card.addEventListener('click', () => {
+      if (card.dataset.state === 'left')  { window.plansCarouselMove(-1); }
+      if (card.dataset.state === 'right') { window.plansCarouselMove(1); }
+    });
+  });
+
+  // fix featured card's feature icons color (CSS can't easily target sibling after nth)
+  const featuredCard = document.querySelector('.pcard-featured');
+  if (featuredCard) {
+    featuredCard.querySelectorAll('.pcard-features li i').forEach(el => {
+      el.style.color = '#f5c842';
+      el.style.background = 'rgba(245,200,66,0.1)';
+    });
+  }
+  const annualCard = cards[2];
+  if (annualCard) {
+    annualCard.querySelectorAll('.pcard-features li i').forEach(el => {
+      el.style.color = '#e63946';
+      el.style.background = 'rgba(230,57,70,0.1)';
+    });
+  }
+
+  updateCarousel();
 })();
