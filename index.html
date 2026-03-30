@@ -62,20 +62,6 @@
 
 <div id="searchResults" style="display:none;margin-bottom:40px;"></div>
 
-<!-- ═══════════════════════════ CONTINUE WATCHING ═══ -->
-<section id="continue">
-  <div class="container">
-    <div class="section-header">
-      <h2 class="section-title">Continue Assistindo</h2>
-    </div>
-    <div class="row-wrapper">
-      <button class="row-arrow row-arrow-left" onclick="scrollRow('continueRow',-1)"><i class="fa-solid fa-chevron-left"></i></button>
-      <div class="scroll-row" id="continueRow"></div>
-      <button class="row-arrow row-arrow-right" onclick="scrollRow('continueRow',1)"><i class="fa-solid fa-chevron-right"></i></button>
-    </div>
-  </div>
-</section>
-
 <!-- ═══════════════════════════════ TOP 10 SÉRIES ═══ -->
 <section id="series">
   <div class="container">
@@ -114,7 +100,6 @@
           <p class="c3d-desc">Uma saga épica de sobrevivência nos Andes. Baseado em uma história real que chocou o mundo.</p>
           <div class="c3d-actions">
             <a href="#" class="btn-hero-main" style="font-size:13px;padding:10px 22px;" onclick="openModal(3);return false;"><i class="fa-solid fa-play"></i> Assistir</a>
-            <a href="#" class="btn-hero-sec" style="font-size:13px;padding:10px 22px;"><i class="fa-solid fa-plus"></i> Minha Lista</a>
           </div>
         </div>
       </div>
@@ -128,7 +113,6 @@
           <p class="c3d-desc">Um explorador solitário enfrenta as forças da natureza em busca de redenção. Visualmente deslumbrante.</p>
           <div class="c3d-actions">
             <a href="#" class="btn-hero-main" style="font-size:13px;padding:10px 22px;"><i class="fa-solid fa-play"></i> Assistir</a>
-            <a href="#" class="btn-hero-sec" style="font-size:13px;padding:10px 22px;"><i class="fa-solid fa-plus"></i> Minha Lista</a>
           </div>
         </div>
       </div>
@@ -142,7 +126,6 @@
           <p class="c3d-desc">Em 2087, um detetive persegue uma IA fugitiva pelas ruas de uma metrópole cyberpunk. Ação sem parar.</p>
           <div class="c3d-actions">
             <a href="#" class="btn-hero-main" style="font-size:13px;padding:10px 22px;"><i class="fa-solid fa-play"></i> Assistir</a>
-            <a href="#" class="btn-hero-sec" style="font-size:13px;padding:10px 22px;"><i class="fa-solid fa-plus"></i> Minha Lista</a>
           </div>
         </div>
       </div>
@@ -156,7 +139,6 @@
           <p class="c3d-desc">Um crime não resolvido de 30 anos volta à tona quando novas evidências surgem em uma pequena cidade.</p>
           <div class="c3d-actions">
             <a href="#" class="btn-hero-main" style="font-size:13px;padding:10px 22px;"><i class="fa-solid fa-play"></i> Assistir</a>
-            <a href="#" class="btn-hero-sec" style="font-size:13px;padding:10px 22px;"><i class="fa-solid fa-plus"></i> Minha Lista</a>
           </div>
         </div>
       </div>
@@ -170,7 +152,6 @@
           <p class="c3d-desc">A história emocionante de uma família que recomeça em um país desconhecido. Coragem, amor e esperança.</p>
           <div class="c3d-actions">
             <a href="#" class="btn-hero-main" style="font-size:13px;padding:10px 22px;"><i class="fa-solid fa-play"></i> Assistir</a>
-            <a href="#" class="btn-hero-sec" style="font-size:13px;padding:10px 22px;"><i class="fa-solid fa-plus"></i> Minha Lista</a>
           </div>
         </div>
       </div>
@@ -200,28 +181,6 @@
       <div class="scroll-row" id="moviesRow"></div>
       <button class="row-arrow row-arrow-right" onclick="scrollRow('moviesRow',1)"><i class="fa-solid fa-chevron-right"></i></button>
     </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════ LANÇAMENTOS ═══ -->
-<section>
-  <div class="container">
-    <div class="section-header">
-      <h2 class="section-title">Lançamentos</h2>
-      <a href="lancamentos.html" class="section-more">Ver tudo <i class="fa-solid fa-chevron-right"></i></a>
-    </div>
-    <div class="row-wrapper">
-      <button class="row-arrow row-arrow-left" onclick="scrollRow('newRow',-1)"><i class="fa-solid fa-chevron-left"></i></button>
-      <div class="scroll-row" id="newRow"></div>
-      <button class="row-arrow row-arrow-right" onclick="scrollRow('newRow',1)"><i class="fa-solid fa-chevron-right"></i></button>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════ MINI CARDS ═══ -->
-<section>
-  <div class="container">
-    <div class="mini-cards-grid" id="miniCardsGrid"></div>
   </div>
 </section>
 
@@ -285,7 +244,7 @@
             <li><i class="fa-solid fa-check"></i><span>Cancelamento a qualquer hora</span></li>
             <li><i class="fa-solid fa-check"></i><span>7 dias grátis</span></li>
           </ul>
-          <button href = "assinatura.html" class="pcard-btn pcard-btn-outline" onclick="selectPlan('Mensal')">Começar grátis</button>
+          <button href = "assinatura.html" class="pcard-btn pcard-btn-outline" onclick="selectPlan('Mensal')">Ver Planos</button>
           <p class="pcard-trial">7 dias grátis · R$ 29,90/mês após</p>
         </div>
       </div>
@@ -320,7 +279,7 @@
             <li><i class="fa-solid fa-check"></i><span>5 perfis de usuário</span></li>
             <li><i class="fa-solid fa-check"></i><span>7 dias grátis</span></li>
           </ul>
-          <button href= "assinatura.html" class="pcard-btn pcard-btn-gold" onclick="selectPlan('Semestral')">Começar grátis</button>
+          <button href= "assinatura.html" class="pcard-btn pcard-btn-gold" onclick="selectPlan('Semestral')">Ver Planos</button>
           <p class="pcard-trial">7 dias grátis · R$ 137,40 a cada 6 meses</p>
         </div>
       </div>
@@ -355,7 +314,7 @@
             <li><i class="fa-solid fa-check"></i><span>Acesso antecipado a estreias</span></li>
             <li><i class="fa-solid fa-check"></i><span>Suporte prioritário 24h</span></li>
           </ul>
-          <button class="pcard-btn pcard-btn-red" onclick="selectPlan('Anual')">Começar grátis</button>
+          <button class="pcard-btn pcard-btn-red" onclick="selectPlan('Anual')">Ver Planos</button>
           <p class="pcard-trial">7 dias grátis · R$ 226,80/ano</p>
         </div>
       </div>
@@ -371,15 +330,6 @@
     <button class="plans-dot active" onclick="plansCarouselGoto(0)"></button>
     <button class="plans-dot plans-dot-gold" onclick="plansCarouselGoto(1)"></button>
     <button class="plans-dot plans-dot-red" onclick="plansCarouselGoto(2)"></button>
-  </div>
-
-  <!-- Guarantee strip -->
-  <div class="plans-guarantee">
-    <div class="plans-guarantee-item"><i class="fa-solid fa-lock"></i><span>Pagamento 100% seguro</span></div>
-    <div class="plans-guarantee-sep"></div>
-    <div class="plans-guarantee-item"><i class="fa-solid fa-rotate-left"></i><span>Cancele a qualquer hora</span></div>
-    <div class="plans-guarantee-sep"></div>
-    <div class="plans-guarantee-item"><i class="fa-solid fa-gift"></i><span>7 dias grátis garantidos</span></div>
   </div>
 </section>
 <!-- ═══════════════════════════════════ FOOTER ═══ -->
@@ -402,7 +352,7 @@
           <li><a href="#home">Início</a></li>
           <li><a href="#series">Séries</a></li>
           <li><a href="#filmes">Filmes</a></li>
-          <li><a href="#categorias">Categorias</a></li>
+          <li><a href="categorias.html">Categorias</a></li>
           <li><a href="#">Documentários</a></li>
         </ul>
       </div>
@@ -410,7 +360,7 @@
         <div class="footer-col-title">Conta</div>
         <ul class="footer-links">
           <li><a href="#">Minha Conta</a></li>
-          <li><a href="#plans">Planos</a></li>
+          <li><a href="planos.html">Planos</a></li>
           <li><a href="#">Configurações</a></li>
           <li><a href="#">Downloads</a></li>
           <li><a href="#">Perfis</a></li>
